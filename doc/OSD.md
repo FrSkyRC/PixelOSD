@@ -754,12 +754,12 @@ Arguments:
 - `Tx` **int16_t**
 - `Ty` **int16_t**
 
-### OSD_CMD_CTM_U16_ROTATE_REV = 99     (Since API 2)
+### OSD_CMD_CTM_U16ROTATE_REV = 99     (Since API 2)
 Reverse version of `OSD_CMD_CTM_U16ROTATE`.
 
 Arguments:
 
-- `angle` **float32**
+- `angle` **uint16_t**
 
 
 ### OSD_CMD_CONTEXT_PUSH = 100
