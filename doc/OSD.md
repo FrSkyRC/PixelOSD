@@ -75,7 +75,34 @@ documented to do so. The response to a command `C` will be returned with its sam
 command identifier.
 
 Errors are reported using the special `0` command followed by the command identifier
-that generated the error and an error code, both as `uint8_t`.
+that generated the error and an error code, both as `uint8_t`. Errors can take the
+following values:
+
+```c
+OSD_CMD_ERR_NONE = 0,
+// The received CMD is not a known one
+OSD_CMD_ERR_UNKNOWN_CMD = -1,
+// A command identifier was expected, but none was found
+OSD_CMD_ERR_NO_COMMAND = -2,
+// Payload received for the current command is smaller than expected
+OSD_CMD_ERR_PAYLOAD_TOO_SMALL = -3,
+OSD_CMD_ERR_BUF_TOO_SMALL = -4,
+// Payload received for the current command doesn't satisfy some invariant
+// (e.g. it contains an invalid value for its type)
+OSD_CMD_ERR_PAYLOAD_INVALID = -5,
+// Something unexpected went wrong. Please, report it as a bug.
+OSD_CMD_ERR_INTERNAL = -6,
+// Can't perform the command in the
+// current state.
+OSD_CMD_ERR_CANT_PERFORM = -7,
+// Ran out of memory when performing
+// the request (e.g. running a user program)
+OSD_CMD_ERR_OUT_OF_MEMORY = -8,
+// Trying to perform an operation that's
+// already done
+OSD_CMD_ERR_ALREADY_DONE = -9,
+```
+
 
 ## UART API
 
