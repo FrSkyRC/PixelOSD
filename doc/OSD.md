@@ -352,12 +352,12 @@ Positive values move the area to the right of the screen.
 - `vertical_offset` **int8_t** Moves thea area the OSD draws into vertically.
 Positive values move the area to the bottom of the screen.
 
-### OSD_CMD_SET_SETTINGS = 9            (Since API 2)
+### OSD_CMD_SET_SETTINGS = 10           (Since API 2)
 Saves the current settings in volatile storage. The arguments follow the same structure and
 semantics than the returned value of `OSD_CMD_GET_SETTINGS`. It also returns the same value
 as `OSD_CMD_GET_SETTINGS`.
 
-### OSD_CMD_SAVE_SETTINGS = 10          (Since API 2)
+### OSD_CMD_SAVE_SETTINGS = 11          (Since API 2)
 Saves the current settings from volatile storage into non-volatile storage.
 
 Returns:
