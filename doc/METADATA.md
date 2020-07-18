@@ -91,3 +91,26 @@ It can be represented in yaml as:
         - u8: value_w
         - u8: value_h
 ```
+
+# colors
+
+Encodes a list of 4 2-bit colors into a single byte. It's identified by the byte `c` followed by the struct:
+
+```c
+typedef struct osd_font_char_metadata_colors_s
+{
+    uint8_t color0 : 2;
+    uint8_t color1 : 2;
+    uint8_t color2 : 2;
+    uint8_t color3 : 2;
+} __attribute__((packed)) osd_font_char_metadata_colors_t;
+```
+
+It can be represented in yaml as:
+
+```yaml
+<char_number>:
+    metadata:
+        - s: 'c'
+        - c: WHITE,BLACK,TRANSPARENT,GRAY
+```

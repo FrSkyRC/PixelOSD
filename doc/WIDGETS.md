@@ -280,7 +280,7 @@ typedef enum
 For increasing effiency, a graph widget must be aligned on a 4 bit boundary and its width must
 be a multiple of 4 too. Otherwise, configuring it will return an error.
 
-To draw the sidebar widget, call `OSD_CMD_WIDGET_DRAW` followed by `WIDGET_ID_GRAPH_x`
+To draw a graph widget, call `OSD_CMD_WIDGET_DRAW` followed by `WIDGET_ID_GRAPH_x`
 and the following payload:
 
 ```c
@@ -295,3 +295,49 @@ typedef struct widget_graph_draw_s
 The graph widget will use the metadata on the `.` character in the same way as the sidebar widget.
 
 ![Graphs](images/graphs.png "Graphs with and without labels")
+
+
+# Char based gauge widget
+
+The char based gauge widget draws a small rectangle shaped gauge on top of on a single
+character by splitting it into two regions of different colors. It's typically used to display a
+battery indicator.
+
+There are 4 instances of this widget. To configure a char gauge widget, send `OSD_CMD_WIDGET_SET_CONFIG`
+followed by `WIDGET_ID_CHARGAUGE_x` and the following payload:
+
+```c
+typedef struct widget_chargauge_config_s
+{
+    osd_point_t point; // Top left point for the first char
+    uint16_t chr;      // First character for the gauge. Must contain the metadata
+} __attribute__((packed)) widget_chargauge_config_t;
+```
+
+To draw the a chargauge widget, call `OSD_CMD_WIDGET_DRAW` followed by `WIDGET_ID_CHARGAUGE_x`
+and the following payload:
+
+```c
+typedef struct widget_chargauge_draw_s
+{
+    uint8_t value;
+} __attribute__((packed)) widget_chargauge_draw_t;
+```
+
+### Metadata usage
+
+Chargauge widgets use the following metadata from the `chr` provided in `widget_chargauge_config_t`:
+
+- `r on chr`: Defines the rect to paint over the character.
+- `c on chr`: Defines the color used to paint over the character. Filled region will use the
+  first color, while the unfilled region will use the second one. Third and fourth color are
+  ignored and can be set to any value.
+- `o on chr`: The offset defines the direction for determining the filled and unfilled region on
+  top of the painted rectangle based on the sign of `x` and `y`. `x < 0` indicates an horizontally
+  filling region starting from the right, while `x > 0` makes the widget fill from the left. `y < 0`
+  will fill the region vertically starting from the bottom and growing to the top, while `y > 0` causes
+  it to fill in the opposite direction. If both `x` and `y` are non-zero, `x` will take precedence.
+
+
+If the character is missing any of the required metadata, `OSD_CMD_WIDGET_SET_CONFIG` will return
+an error.

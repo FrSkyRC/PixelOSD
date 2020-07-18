@@ -75,7 +75,7 @@ documented to do so. The response to a command `C` will be returned with its sam
 command identifier.
 
 Errors are reported using the special `0` command followed by the command identifier
-that generated the error and an error code, both as `uint8_t`. Errors can take the
+that generated the error (`uint8_t`) and an error code (`int8_t`). Errors can take the
 following values:
 
 ```c
@@ -86,6 +86,9 @@ OSD_CMD_ERR_UNKNOWN_CMD = -1,
 OSD_CMD_ERR_NO_COMMAND = -2,
 // Payload received for the current command is smaller than expected
 OSD_CMD_ERR_PAYLOAD_TOO_SMALL = -3,
+// The provided buffer was too small for the response. The UART transport
+// manages the buffers automatically, so if you see this error when using
+// it, please report it as a bug.
 OSD_CMD_ERR_BUF_TOO_SMALL = -4,
 // Payload received for the current command doesn't satisfy some invariant
 // (e.g. it contains an invalid value for its type)
