@@ -38,6 +38,9 @@ message, please test your code against the [FrSky OSD Simulator](https://github.
 and it will print a fully detailed error message to the console when the widget configuration
 is incorrect.
 
+If no errors occur, `OSD_CMD_WIDGET_SET_CONFIG` will return the applied widget configuration, which
+might be slightly different than the requested configuration.
+
 ## Units
 Some widgets take a `osd_unit_t` as part of their configuration. This unit is used to display
 the value to the user with the appropriate symbol (if any) and, optionally, change to a bigger
@@ -74,6 +77,10 @@ WIDGET_ID_GRAPH_0 = 3,      // Graph with optional labels
 WIDGET_ID_GRAPH_1 = 4,      // Second instance of graph widget
 WIDGET_ID_GRAPH_2 = 5,      // Third instance of graph widget
 WIDGET_ID_GRAPH_3 = 6,      // Fourth instance of graph widget
+WIDGET_ID_CHARGAUGE_0 = 7,  // Char based gauge
+WIDGET_ID_CHARGAUGE_1 = 8,  // Second instance of char gauge
+WIDGET_ID_CHARGAUGE_2 = 9,  // Third instance of char gauge
+WIDGET_ID_CHARGAUGE_3 = 10, // Fourth instance of char gauge
 ```
 
 # AHI Widget

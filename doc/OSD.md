@@ -175,6 +175,15 @@ struct osd_chr_data_t {
 }
 ```
 
+### bitmap_opts_t (uint8_t)
+Options for bitmap drawing.
+
+Values:
+- `BITMAP_OPT_INVERSE` = 1 << 0: Invert black and white colors
+- `BITMAP_OPT_SOLID_BACKGROUND` = 1 << 1: Draw a solid gray color where the bitmap has transparent pixels
+- `BITMAP_OPT_ERASE_TRANSPARENT` = 1 << 2: Instead of skipping transparent pixels, erase them on the destination
+
+
 ### color_t (uint8_t)
 Available colors for drawing.
 
@@ -289,7 +298,10 @@ Returns:
 - `data` **osd_chr_data_t**
 
 ### OSD_CMD_WRITE_FONT = 3
-Writes a font character into the non volatile memory.
+Writes a font character into the non volatile memory. Note that, due the hardware limitations,
+if the character is not blank overwriting it will cause the whole font to be erased first. For
+this reason, it's recommended to upload the always whole font by issuing as many sequential
+`OSD_CMD_WRITE_FONT` commands as characters your font has.
 
 **Notes:**
 - When using the UART API, this command must be sent on
