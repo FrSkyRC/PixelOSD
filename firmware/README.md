@@ -43,3 +43,19 @@ hold the `VIDEO_IN` and `VIDEO_OUT` pins shorted together and power
 only the OSD up. This will force it to stay in bootloader mode and
 then you can use the app as if you were flashing it from a working
 firmware.
+
+### Alternative flashing methods
+
+If the FrSky OSD app doesn't run on your system, you can flash new
+firmwares manually using the Python SDK.
+
+Download [frskyosd.py](../sdk/python/frskyosd/frskyosd.py]) and the
+`.bin` file for the firmware that you want to flash from this
+directory. With both downloaded to the same directory, run:
+
+```sh
+python frskyosd.py --flash FrSkyOSD-vx.y.z_YYYYMMDD.bin <COM-port>
+```
+
+If it finishes without printing any error messages, the firmware was
+succesfully flashed to the OSD.
