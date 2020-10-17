@@ -140,6 +140,12 @@ class WIDGETS:
 
     GRAPH_OPTION_BATCHED = 1 << 0
 
+    CHARGAUGE_0 = 7
+    CHARGAUGE_1 = 8
+    CHARGAUGE_2 = 9
+    CHARGAUGE_3 = 10
+
+
 FLASH_WRITE_MAX_BLOCK_SIZE = 64
 FLASH_WRITE_END = (2 << 31) - 1
 
@@ -296,7 +302,10 @@ class SerialConn:
 
 class TCPConn:
     def __init__(self, loc):
-        host, port = loc.split(':')
+        if loc == 'simulator':
+            host, port = 'localhost', 1983
+        else:
+            host, port = loc.split(':')
         self._conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._conn.connect((host, int(port)))
 
@@ -311,7 +320,7 @@ class TCPConn:
 
     @classmethod
     def accepts(cls, loc):
-        return ':' in loc
+        return loc == 'simulator' or ':' in loc
 
 class OSD:
 
@@ -423,6 +432,10 @@ class OSD:
                         progress(chr_addr)
                     data = bytearray()
                     chr_addr += 1
+
+    def read_font_char(self, char_addr):
+        payload = struct.pack('<H', char_addr)
+        return self.send_frame_sync_resp(CMD.READ_FONT, payload)
 
     # Firmware flashing
 
@@ -726,6 +739,10 @@ class OSD:
         payload = struct.pack('<B', wid) + data
         return self.send_frame(CMD.WIDGET_DRAW, payload)
 
+    def _widget_erase(self, wid):
+        payload = struct.pack('<B', wid)
+        return self.send_frame(CMD.WIDGET_ERASE, payload)
+
     def widget_ahi_set_config(self, r, style, crosshair_margin, stroke_width=1, options=0):
         config = self._pack_rect(r) + struct.pack('<BBBB', style, options, crosshair_margin, stroke_width)
         return self._widget_set_config(WIDGETS.AHI, config)
@@ -754,6 +771,16 @@ class OSD:
     def widget_graph_draw(self, idx, value):
         wid = self._map_wid(idx, WIDGETS.GRAPH_0, WIDGETS.GRAPH_3)
         data = self._pack_i24(value)
+        return self._widget_draw(wid, data)
+
+    def widget_chargauge_set_config(self, idx, p, c):
+        wid = self._map_wid(idx, WIDGETS.CHARGAUGE_0, WIDGETS.CHARGAUGE_3)
+        config = self._pack_point(p[0], p[1]) + self._pack_u16(c)
+        return self._widget_set_config(wid, config)
+
+    def widget_chargauge_draw(self, idx, value):
+        wid = self._map_wid(idx, WIDGETS.CHARGAUGE_0, WIDGETS.CHARGAUGE_3)
+        data = self._pack_u8(value)
         return self._widget_draw(wid, data)
 
     # VM
